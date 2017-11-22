@@ -11,7 +11,7 @@ from datetime import datetime
 
 class JdspiderPipeline(object):
     def process_item(self, item, spider):
-        item["downloadTime"] = datetime.datetime.now()
+        item["downloadTime"] = datetime.now()
         return item
 
 
