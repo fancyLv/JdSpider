@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pymongo
+# import pymongo
 from datetime import datetime
 
 
@@ -15,11 +15,11 @@ class JdspiderPipeline(object):
         return item
 
 
-class MongoDBPipeline(object):
-    def __init__(self):
-        client = pymongo.MongoClient('localhost', 27017)
-        db = client['Jd']
-        self.JdItem = db['JdItem']
-
-    def process_item(self, item, spider):
-        self.JdItem.insert(item)
+# class MongoDBPipeline(object):
+#     def __init__(self):
+#         client = pymongo.MongoClient('localhost', 27017)
+#         db = client['Jd']
+#         self.JdItem = db['JdItem']
+#
+#     def process_item(self, item, spider):
+#         self.JdItem.insert(item)
