@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pymongo
-from JdSpider.items import JdspiderItem
+from datetime import datetime
 
 
 # Define your item pipelines here
@@ -11,6 +11,7 @@ from JdSpider.items import JdspiderItem
 
 class JdspiderPipeline(object):
     def process_item(self, item, spider):
+        item["downloadTime"] = datetime.datetime.now()
         return item
 
 
@@ -21,6 +22,4 @@ class MongoDBPipeline(object):
         self.JdItem = db['JdItem']
 
     def process_item(self, item, spider):
-        jdItem = dict(item)
-        self.JdItem.insert(jdItem)
-        return jdItem
+        self.JdItem.insert(item)

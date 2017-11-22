@@ -39,7 +39,7 @@ class JdSpider(CrawlSpider):
         tag = response.css('.u-jd,.i-ziying').xpath("string(.)").extract_first()
         item['isJD'] = 1 if tag and u'自营' in tag else 0
         item['category'] = response.css('.crumb-wrap .crumb .item > a::text,#root-nav .breadcrumb a::text').extract()
-        item['brand'] = response.css('#parameter-brand li::text').extract_first()
+        item['brand'] = response.css('#parameter-brand li > a::text').extract_first()
         item['parameter'] = response.css('.parameter2 li::text,#parameter2 li::text').extract()
 
         price_url = r'https://p.3.cn/prices/mgets?type=1&area=1_72_2799_0&pdtk=&pduid=&pdpin=&pdbp=0&skuIds=J_{}&source=item-pc'.format(
@@ -75,13 +75,12 @@ class JdSpider(CrawlSpider):
 
     def parse_promotion(self, response):
         item = response.meta['item']
-        jsonresponse = json.loads(response.body_as_unicode())
+        jsonresponse = json.loads(response.body_as_unicode().encode("raw_unicode_escape").decode('gbk'))
         promotion = jsonresponse.get("prom")
         promotion_dict = {}
         tags = promotion.get("pickOneTag", []) + promotion.get("tags", [])
         for tag in tags:
             name = tag.get("name")
-            print name
             content = tag.get("content").replace("&nbsp;<a href='javascript:login();'>", " ").replace("</a>&nbsp;", " ")
             promotion_dict[name] = content
         item['promotion'] = promotion_dict
@@ -105,5 +104,5 @@ class JdSpider(CrawlSpider):
             item['commentsCount'] = data['CommentsCount'][0]['CommentCountStr']
         except Exception, e:
             pass
-        item['downloadTime'] = datetime.datetime.now()
+        # item['downloadTime'] = datetime.datetime.now()
         yield item
